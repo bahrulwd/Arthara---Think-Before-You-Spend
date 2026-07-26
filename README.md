@@ -47,7 +47,7 @@
   <img src="public/screenshot/moneyleak.png" alt="Arthara Money Leak Scanner" width="100%">
   
   **4. Smart Budgeting & Savings Goals**
-  <img src="public/screenshot/budgets.png" alt="Arthara Budgets & Goals" width="100%">
+  <img src="public/screenshot/budgeting.png" alt="Arthara Budgets & Goals" width="100%">
   
 </details>
 
