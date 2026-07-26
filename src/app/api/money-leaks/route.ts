@@ -19,6 +19,38 @@ export async function GET() {
   }
 }
 
+export async function POST(request: Request) {
+  try {
+    const cookieStore = await cookies();
+    const userId = cookieStore.get("userId")?.value || "default-user-id";
+    const body = await request.json();
+    const { sourceName, monthlyCost, leakType, mitigationPlan } = body;
+
+    if (!sourceName || !monthlyCost) {
+      return NextResponse.json(
+        { error: "Source name and monthly cost are required" },
+        { status: 400 }
+      );
+    }
+
+    const newLeak = await prisma.moneyLeak.create({
+      data: {
+        userId,
+        sourceName,
+        monthlyCost: Number(monthlyCost),
+        leakType: leakType || "VAMPIRIC_HABIT",
+        mitigationPlan: mitigationPlan || "Tinjau ulang dan batalkan pengeluaran ini.",
+        isResolved: false,
+      },
+    });
+
+    return NextResponse.json(newLeak, { status: 201 });
+  } catch (error: any) {
+    console.error("Failed to create money leak:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
 export async function PATCH(request: Request) {
   try {
     const cookieStore = await cookies();
