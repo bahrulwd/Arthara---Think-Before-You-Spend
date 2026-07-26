@@ -37,18 +37,17 @@
   <br>
   
   **1. Single-Page SPA Landing & AI Pre-Spending Simulator**
-  <img src="public/images/antarmukaArthara/landing.png" alt="Arthara Landing Page" width="100%">
-  <img src="public/images/antarmukaArthara/simulator.png" alt="Arthara AI Simulator" width="100%">
+  <img src="public/screenshot/landing.png" alt="Arthara Landing Page" width="100%">
 
   **2. Smart Dashboard & Financial Health Score**
-  <img src="public/images/antarmukaArthara/dashboard.png" alt="Arthara Dashboard" width="100%">
-  <img src="public/images/antarmukaArthara/healthscore.png" alt="Arthara Health Score" width="100%">
+  <img src="public/screenshot/dashboard.png" alt="Arthara Dashboard" width="100%">
+
 
   **3. Money Leak Scanner & Behavioral Insights**
-  <img src="public/images/antarmukaArthara/moneyleak.png" alt="Arthara Money Leak Scanner" width="100%">
+  <img src="public/screenshot/moneyleak.png" alt="Arthara Money Leak Scanner" width="100%">
   
   **4. Smart Budgeting & Savings Goals**
-  <img src="public/images/antarmukaArthara/budgets.png" alt="Arthara Budgets & Goals" width="100%">
+  <img src="public/screenshot/budgets.png" alt="Arthara Budgets & Goals" width="100%">
   
 </details>
 
