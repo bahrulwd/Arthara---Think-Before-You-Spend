@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id               String               @id @default(uuid())
+  email            String               @unique
+  password         String?
+  name             String?
+  onboarded        Boolean              @default(false)
+  financialMindset String?              // IMPULSIVE, SECURE, ANXIOUS, AVOIDANT
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  
+  // Relations
+  transactions       Transaction[]
+  budgets            Budget[]
+  goals              FinancialGoal[]
+  preSpendingChecks  PreSpendingCheck[]
+  moneyLeaks         MoneyLeak[]
+  simulations        Simulation[]
+}
+
+model Transaction {
+  id                 String             @id @default(uuid())
+  userId             String
+  amount             Decimal
+  type               String             // INCOME, EXPENSE
+  category           String
+  date               DateTime
+  description        String?
+  behavioralTag      String?            // IMPULSE, PLANNED, NEED, EMOTIONAL, STATUS
+  moodBefore         String?            // Happy, Stressed, Bored, Sad, Calm
+  moodAfter          String?            // Guilty, Satisfied, Indifferent, Regretful
+  preSpendingCheckId String?            @unique
+  createdAt          DateTime           @default(now())
+
+  // Relations
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  preSpendingCheck   PreSpendingCheck?  @relation(fields: [preSpendingCheckId], references: [id], onDelete: SetNull)
+}
+
+model Budget {
+  id          String   @id @default(uuid())
+  userId      String
+  category    String
+  amountLimit Decimal
+  period      String   // WEEKLY, MONTHLY
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, category, period])
+}
+
+model FinancialGoal {
+  id            String   @id @default(uuid())
+  userId        String
+  name          String
+  targetAmount  Decimal
+  currentAmount Decimal  @default(0.0)
+  deadline      DateTime
+  priority      String?  // HIGH, MEDIUM, LOW
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PreSpendingCheck {
+  id                 String       @id @default(uuid())
+  userId             String
+  itemName           String
+  cost               Decimal
+  needRating         Int          // 1-10
+  wantRating         Int          // 1-10
+  happinessDelayDays Int          // Cooling off friction period
+  status             String       // PENDING, APPROVED, ABANDONED
+  createdAt          DateTime     @default(now())
+  reviewDate         DateTime     // Time when user can make decision after delay
+  updatedAt          DateTime     @updatedAt
+
+  // Relations
+  user               User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transaction        Transaction?
+}
+
+model MoneyLeak {
+  id             String   @id @default(uuid())
+  userId         String
+  sourceName     String   // e.g. "Netflix Premium", "Daily Artisan Coffee Loop"
+  monthlyCost    Decimal
+  leakType       String   // INACTIVE_SUBSCRIPTION, VAMPIRIC_HABIT, CONVENIENCE_PREMIUM
+  mitigationPlan String   // e.g. "Downgrade to Standard", "Brew at home 4x a week"
+  isResolved     Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Simulation {
+  id             String   @id @default(uuid())
+  userId         String
+  scenarioName   String
+  description    String?
+  initialBalance Decimal
+  monthlySavings Decimal
+  growthRate     Float
+  years          Int
+  results        Json     // Stores projection series data
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
